@@ -1,0 +1,21 @@
+{
+  "name": "webchat",
+  "description": "",
+  "main": "index.js",
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "angular": "^1.5.6",
+    "angular-route": "^1.5.6",
+    "angular-moment": "^0.10.3"
+  }
+}
