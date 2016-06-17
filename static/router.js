@@ -6,7 +6,10 @@ angular.module('webchatApp').config(function($routeProvider, $locationProvider) 
   }).when('/login', {
     templateUrl: '/pages/login.html',
     controller: 'LoginCtrl'
+  }).when('/index', {
+    templateUrl: '/pages/index.html',
+    controller: 'IndexCtrl'
   }).otherwise({
-    redirectTo: '/login'
+    redirectTo: '/index'
   })
 })

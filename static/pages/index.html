@@ -1,0 +1,88 @@
+<div class="row hidden-xs" id="home-intro">
+  <div class="col-md-4 index-intro-slogan">
+    <h1>欢迎来到WebChat</h1>
+    <p>这是一个自由交流的平台</p>
+  </div>
+  <div class="col-md-3 home-intro-slogan-icon">
+    <figure></figure>
+  </div>
+  <div class="col-md-3 col-md-offset-2" id="home-intro-log">
+    <div class="form-group" id="home-switcher-wrap">
+      <ul class="login-switcher">
+        <li onclick="redirectToLogin()" id="loginPhase" class="active"><a href="javascript:;">登录</a></li>
+        <li onclick="redirectToRegister()" id="registerPhase" class=""><a href="javascript:;">注册</a></li>
+      </ul>
+    </div>
+    <div>
+      <form id="home-login-form" ng-submit="login()" style="display:block;">
+        <div class="col-md-4 col-sm-6 home-login-form-icon">
+          <figure></figure>
+        </div>
+        <div class="col-md-8 col-sm-6 home-login-form-desc">
+          <h4>欢迎</h4>
+          <p>登陆开始新的聊天</p>
+        </div>
+        <div class="form-group">
+          <label for="loginInputUsername" class="sr-only">用户名</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" required class="form-control" id="loginInputUsername" ng-model="loginUsername" placeholder="请输入用户名" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="loginInputPassword" class="sr-only">密码</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+            <input type="password" required class="form-control" id="loginInputPassword" ng-model="loginPassword" placeholder="请输入密码" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-enter btn-lg btn-block">登录</button>
+      </form>
+      <form id="home-register-form" ng-submit="register()" style="display:none">
+        <div class="form-group">
+          <label for="registerInputUsername" class="sr-only">用户名</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" required class="form-control" id="registerInputUsername" ng-model="registerUsername" placeholder="请输入用户名">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="registerInputEmail" class="sr-only">邮箱</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+            <input type="email" required class="form-control" id="registerInputEmail" ng-model="registerEmail" placeholder="请输入邮箱">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="registerInputPassword" class="sr-only">密码</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+            <input type="password" required class="form-control" id="registerInputPassword" ng-model="registerPassword" placeholder="请输入密码，最少6位">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="registerInputRepeat" class="sr-only">重复密码</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+            <input type="password" required class="form-control" id="registerInputRepeat" ng-model="registerRepeat" placeholder="请再次确认密码">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-enter btn-lg btn-block">注册</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function redirectToLogin() {
+    document.getElementById("loginPhase").className = "active"
+    document.getElementById("registerPhase").className = ""
+    document.getElementById("home-login-form").style.display = "block"
+    document.getElementById("home-register-form").style.display = "none"
+  }
+  function redirectToRegister() {
+    document.getElementById("registerPhase").className = "active"
+    document.getElementById("loginPhase").className = ""
+    document.getElementById("home-register-form").style.display = "block"
+    document.getElementById("home-login-form").style.display = "none"
+  }
+</script>

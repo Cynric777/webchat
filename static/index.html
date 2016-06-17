@@ -4,7 +4,7 @@
     <title>webchat</title>
     <base href="/login">
     <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/styles/room.css">
+    <link rel="stylesheet" href="/styles/styles.css">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.js"></script>
@@ -19,14 +19,50 @@
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">webchat</a>
+          <img height="60px" width="60px" src="/images/navbar-logo.png" />
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
           <ul class="nav navbar-nav navbar-right" ng-show="me">
-            <li>
-              <img height="50px" width="50px" ng-src="{{me.avatarUrl}}" title="{{me.name}}" class="img-circle" />
+            <li class="dropdown messages-dropdown" style="padding-top:4px;">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <i class="glyphicon glyphicon-envelope"></i>
+                &nbsp&nbsp消息
+                <span class="badge">{{me.applyNumber}}</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu" style="width:300px">
+                <li class="dropdown-header">
+                  {{me.applyNumber}}&nbsp个新消息
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <i class="glyphicon glyphicon-bell"></i>
+                    &nbsp&nbspSnow已经同意加您为好友
+                  </a>
+                </li>
+                <li class="message-preview" ng-repeat="apply in me.applyArray track by $index" style="font-size:14px">
+                  <a href="#">
+                    <i class="glyphicon glyphicon-bell"></i>
+                    &nbsp&nbsp{{apply.guest}}申请加您为好友
+                    <i class="glyphicon glyphicon-remove" style="float:right;color:red" ng-click="handleRefuse(apply)"></i>
+                    <i class="glyphicon glyphicon-ok" style="float:right;color:green" ng-click="handleAgree(apply)">&nbsp</i>
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li>
-              <a href="" ng-click="logout()">Log out</a>
+            <li class="dropdown user-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <img height="30px" width="30px" ng-src="{{me.avatarUrl}}" title="{{me.username}}" class="img-circle" />
+                &nbsp&nbsp{{me.username}}
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#"><i class="glyphicon glyphicon-user"></i>&nbsp&nbsp&nbsp&nbsp个人信息</a></li>
+                <li><a href="#"><i class="glyphicon glyphicon-cog"></i>&nbsp&nbsp&nbsp&nbsp设置</a></li>
+                <li class="divider"></li>
+                <li><a href="" ng-click="logout()"><span class="glyphicon glyphicon-off"></span>&nbsp&nbsp&nbsp&nbsp注销</a></li>
+              </ul>
             </li>
           </ul>
         </nav>
@@ -39,9 +75,12 @@
     <script type="text/javascript" src="/services/socket.js"></script>
     <script type="text/javascript" src="/controllers/room.js"></script>
     <script type="text/javascript" src="/controllers/login.js"></script>
+    <script type="text/javascript" src="/controllers/index.js"></script>
+    <script type="text/javascript" src="/controllers/user-search.js"></script>
     <script type="text/javascript" src="/controllers/message-creator.js"></script>
     <script type="text/javascript" src="/directives/auto-scroll-to-bottom.js"></script>
     <script type="text/javascript" src="/directives/ctrl-enter-break-line.js"></script>
+    <script type="text/javascript" src="/common/underscore.js"></script>
     <script type="text/javascript" src="router.js"></script>
   </body>
 </html>

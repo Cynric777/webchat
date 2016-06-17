@@ -1,9 +1,46 @@
+<div id="searchResultModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;"  ng-controller="UserSearchCtrl">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title"><img height="60px" width="60px" src="/images/search-logo.png" />查找</h4>
+      </div>
+      <div class="modal-body">
+        <p id="resultTitle">用户不存在</p>
+        <div ng-show="userExist">
+          <img height="32px" width="32px" src="{{userExist.avatarUrl}}" title="{{userExist.username}}" class="img-circle" />
+          &nbsp&nbsp&nbsp&nbsp{{userExist.username}}
+          <button type="button" class="btn btn-success" ng-click="sendApplyForFriend()" style="float:right;"><i class="glyphicon glyphicon-plus"></i>&nbsp&nbsp添加好友</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="panel panel-default user-list">
+    <div class="panel-heading user-list-header">好友列表</div>
+    <div class="panel-body user-list-content">
+      <div class="list-group users">
+        <div class="list-group-item user" ng-repeat="user in room.users track by $index">
+          <img height="32px" width="32px" src="{{user.avatarUrl}}" title="{{user.username}}" class="img-circle" />
+          {{user.username}}
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="input-group" ng-controller="UserSearchCtrl">
+        <input type="text" required class="form-control" ng-model="searchUsername" placeholder="查找用户" />
+        <span class="input-group-addon" ng-click="search()"><span class="glyphicon glyphicon-search"></span></span>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="col-md-9">
   <div class="panel panel-default room">
     <div class="panel-heading room-header">webchat</div>
     <div class="panel-body room-content">
       <div class="list-group messages" auto-scroll-to-bottom>
-        <div class="list-group-item message" ng-repeat="message in room.messages">
+        <div class="list-group-item message" ng-repeat="message in room.messages track by $index">
           <img height="32px" width="32px" ng-src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-circle" />
           {{message.creator.name}}：{{message.message}}
           <time am-time-ago="message.createAt"></time>
@@ -14,19 +51,6 @@
           <textarea required class="form-control message-input" ng-model="newMessage" ctrl-enter-break-line="createMessage()" placeholder="Ctrl+Enter to quick send"></textarea>
         </div>
       </form>
-    </div>
-  </div>
-</div>
-<div class="col-md-3">
-  <div class="panel panel-default user-list">
-    <div class="panel-heading user-list-header">在线用户</div>
-    <div class="panel-body user-list-content">
-      <div class="list-group users">
-        <div class="list-group-item user" ng-repeat="user in room.users">
-          <img height="32px" width="32px" src="{{user.avatarUrl}}" title="{{user.name}}" class="img-circle" />
-          {{user.name}}
-        </div>
-      </div>
     </div>
   </div>
 </div>

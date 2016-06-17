@@ -50,18 +50,18 @@ app.get('/api/validate', function(req, res) {
 
 app.post('/api/login', function(req, res) {
   console.log("in login")
-  var email = req.body.email
-  if (email) {
-    Controllers.User.findByEmailOrCreate(email, function(err, user) {
+  var username = req.body.username
+  var password = req.body.password
+  if (username && password) {
+    Controllers.User.checkPassword(username, password, function(err, user) {
       if (err) {
-        res.json(500, {
-          msg: err
-        })
+        res.status(401).json(err)
       } else {
         req.session._userId = user._id
+        req.session._username = user.username
         Controllers.User.online(user._id, function(err, user) {
           if (err) {
-            res.json(500, {
+            res.status(500).json({
               msg: err
             })
           } else {
@@ -71,7 +71,52 @@ app.post('/api/login', function(req, res) {
       }
     })
   } else {
-    res.json(403)
+    res.status(401).json(null)
+  }
+})
+
+app.post('/api/register', function(req, res) {
+  console.log("in register")
+  var username = req.body.username
+  var email = req.body.email
+  var password = req.body.password
+  var msg = 0
+  if (username && email && password) {
+    Controllers.User.findUserByName(username, function(err, user) {
+      if (user) {
+        msg += 1
+      }
+      Controllers.User.findUserByEmail(email, function(err, user) {
+        if (user) {
+          msg += 2
+        }
+        if (msg) {
+          res.status(403).json(msg)
+        } else {
+          Controllers.User.createUser(username, email, password, function(err, user) {
+            if (err) {
+              res.status(500).json({
+                msg: err
+              })
+            } else {
+              req.session._userId = user._id
+              req.session._username = user.username
+              Controllers.User.online(user._id, function(err, user) {
+                if (err) {
+                  res.status(500).json({
+                    msg: err
+                  })
+                } else {
+                  res.json(user)
+                }
+              })
+            }
+          })
+        }
+      })
+    })
+  } else {
+    res.status(401).json(null)
   }
 })
 
@@ -86,6 +131,22 @@ app.get('/api/logout', function(req, res) {
     } else {
       res.json(user)
       delete req.session._userId
+      delete req.session._username
+    }
+  })
+})
+
+app.post('/api/handleApply', function(req, res) {
+  console.log("in handleApply")
+  var _applyId = req.body._applyId
+  var result = req.body.result
+  Controllers.Apply.handleApply(_applyId, result, function(err, apply) {
+    if (err) {
+      res.status(500).json({
+        msg: err
+      })
+    } else {
+      res.json(null)
     }
   })
 })
@@ -124,6 +185,7 @@ io.set('authorization', function(handshakeData, accept) {
 
 io.sockets.on('connection', function(socket) {
   var _userId = socket.request.session._userId
+  var _username = socket.request.session._username
   Controllers.User.online(_userId, function(err, user) {
     if (err) {
       socket.emit('err', {
@@ -145,6 +207,28 @@ io.sockets.on('connection', function(socket) {
     })
   })
 
+  socket.on('search', function(username) {
+    Controllers.User.findUserByName(username, function(err, user) {
+      var result = false
+      if (user) {
+        result = true
+        socket.emit('searchResult', {
+          result: result,
+          username: user.username,
+          avatarUrl: user.avatarUrl
+        })
+      } else {
+        socket.emit('searchResult', {
+          result: result
+        })
+      }
+    })
+  })
+
+  socket.on('apply', function(username) {
+    Controllers.Apply.createApply(username, _username, null)
+  })
+
   socket.on('getRoom', function() {
     async.parallel([
       function(done) {
@@ -160,34 +244,28 @@ io.sockets.on('connection', function(socket) {
           msg: err
         })
       } else {
+        var friendList = []
+        for (var i = 0; i < results[0].length; i++) {
+          friendList[i] = {
+            username: results[0][i].username,
+            avatarUrl: results[0][i].avatarUrl,
+            online:results[0][i].online
+          }
+        }
         socket.emit('roomData', {
-          users: results[0],
+          users: friendList,
           messages: results[1]
         })
       }
     })
   })
-  //   Controllers.User.getOnlineUsers(function(err, users) {
-  //     if (err) {
-  //       socket.emit('err', {
-  //         msg: err
-  //       })
-  //     } else {
-  //       socket.emit('roomData', {
-  //         users: users,
-  //         messages: messages
-  //       })
-  //     }
-  //   })
-  // })
-  //
-  // socket.on('getAllMessages', function() {
-  //   socket.emit('allMessages', messages)
-  // })
-  // socket.on('createMessage', function(message) {
-  //   messages.push(message)
-  //   socket.emit('messageAdded', message)
-  // })
+
+  socket.on('getApply', function(username) {
+    Controllers.Apply.findApplyByHost(username, function(err, applyArray) {
+      socket.emit('applyData', applyArray)
+    })
+  })
+
   socket.on('createMessage', function(message) {
     Controllers.Message.create(message, function(err, message) {
       if (err) {
