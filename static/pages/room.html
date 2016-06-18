@@ -20,12 +20,42 @@
   <div class="panel panel-default user-list">
     <div class="panel-heading user-list-header">好友列表</div>
     <div class="panel-body user-list-content">
-      <div class="list-group users">
-        <div class="list-group-item user" ng-repeat="user in room.users track by $index">
-          <img height="32px" width="32px" src="{{user.avatarUrl}}" title="{{user.username}}" class="img-circle" />
-          {{user.username}}
+      <div ng-repeat="group in groupArray track by $index">
+        <div class="panel-group" id="accordion{{$index}}" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading{{$index}}">
+              <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion{{$index}}" data-target="#collapse{{$index}}" aria-expanded="false" aria-controls="collapse{{$index}}">
+                  {{group[0].groupname}}
+                </a>
+              </h4>
+            </div>
+            <div id="collapse{{$index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{$index}}">
+              <div class="list-group">
+                <div class="list-group-item" ng-repeat="friend in group track by $index" ng-show="friend.guest">
+                  <img height="32px" width="32px" src="{{friend.avatarUrl}}" title="{{friend.guest}}" class="img-circle" />
+                  {{friend.guest}}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- <div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+              <a role="button" data-toggle="collapse" data-parent="#accordion1" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Collapsible Group Item #1
+              </a>
+            </h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              Anim pariatur cliche reprehenderit</div>
+          </div>
+        </div>
+      </div> -->
     </div>
     <div class="panel-footer">
       <div class="input-group" ng-controller="UserSearchCtrl">

@@ -28,11 +28,27 @@ angular.module('webchatApp', ['ngRoute', 'angularMoment']).run(function($window,
     })
   }
   $rootScope.handle = function(apply) {
-    console.log(apply)
+    var _applyId = apply._id
+    $http({
+      url: '/api/handle',
+      method: 'POST',
+      data: {
+        _applyId: _applyId
+      }
+    }).then(function successCallback(apply) {
+      console.log("已阅")
+      $rootScope.me.agreeArray = $rootScope.me.agreeArray.filter(function(apply) {
+        return apply._id != _applyId
+      })
+      $rootScope.me.refuseArray = $rootScope.me.refuseArray.filter(function(apply) {
+        return apply._id != _applyId
+      })
+      $rootScope.me.applyNumber--
+    })
+
   }
   $rootScope.handleAgree = function(apply) {
     console.log("agree")
-    console.log(apply)
     var _applyId = apply._id
     $http({
       url: '/api/handleApply',
@@ -51,7 +67,6 @@ angular.module('webchatApp', ['ngRoute', 'angularMoment']).run(function($window,
   }
   $rootScope.handleRefuse = function(apply) {
     console.log("refuse")
-    console.log(apply)
     var _applyId = apply._id
     $http({
       url: '/api/handleApply',

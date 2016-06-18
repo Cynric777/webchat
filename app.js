@@ -101,6 +101,7 @@ app.post('/api/register', function(req, res) {
             } else {
               req.session._userId = user._id
               req.session._username = user.username
+              Controllers.Group.createGroup("我的好友", username, null)
               Controllers.User.online(user._id, function(err, user) {
                 if (err) {
                   res.status(500).json({
@@ -136,6 +137,20 @@ app.get('/api/logout', function(req, res) {
   })
 })
 
+app.post('/api/handle', function(req, res) {
+  console.log("in handle")
+  var _applyId = req.body._applyId
+  Controllers.Apply.handle(_applyId, function(err, apply) {
+    if (err) {
+      res.status(500).json({
+        msg: err
+      })
+    } else {
+      res.json(null)
+    }
+  })
+})
+
 app.post('/api/handleApply', function(req, res) {
   console.log("in handleApply")
   var _applyId = req.body._applyId
@@ -146,6 +161,18 @@ app.post('/api/handleApply', function(req, res) {
         msg: err
       })
     } else {
+      apply.result = result
+      if (result == true) {
+        var avatarUrlOfHost, avatarUrlOfGuest
+        Controllers.User.getAvatarUrlOfUser(apply.host, function(err, user) {
+          avatarUrlOfHost = user.avatarUrl
+          Controllers.User.getAvatarUrlOfUser(apply.guest, function(err, user) {
+            avatarUrlOfGuest = user.avatarUrl
+            Controllers.Group.addFriend(apply, avatarUrlOfHost, avatarUrlOfGuest, null)
+          })
+        })
+      }
+      Controllers.Apply.createApproval(apply, null)
       res.json(null)
     }
   })
@@ -263,6 +290,12 @@ io.sockets.on('connection', function(socket) {
   socket.on('getApply', function(username) {
     Controllers.Apply.findApplyByHost(username, function(err, applyArray) {
       socket.emit('applyData', applyArray)
+    })
+  })
+
+  socket.on('getFriend', function(username) {
+    Controllers.Group.findGroupByHost(username, function(err, friendArray) {
+      socket.emit("friendData", friendArray)
     })
   })
 

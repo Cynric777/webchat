@@ -46,42 +46,6 @@ exports.checkPassword = function(username, password, callback) {
   })
 }
 
-// exports.findUserByNameEmailOrCreate = function(username, email, password, callback) {
-//   db.User.findOne({
-//     $or: [
-//       {username: username},
-//       {email: email}
-//     ]
-//   }, function(err, user) {
-//     if (user) {
-//       callback(1, user)
-//     } else {
-//       user = new db.User
-//       user.username = username
-//       user.email = email
-//       user.password = password
-//       user.avatarUrl = gravatar.url(email)
-//       user.save(callback)
-//     }
-//   })
-// }
-//
-// exports.findByEmailOrCreate = function(email, callback) {
-//   db.User.findOne({
-//     email: email
-//   }, function(err, user) {
-//     if (user) {
-//       callback(null, user)
-//     } else {
-//       user = new db.User
-//       user.name = email.split('@')[0]
-//       user.email = email
-//       user.avatarUrl = gravatar.url(email)
-//       user.save(callback)
-//     }
-//   })
-// }
-
 exports.online = function(_userId, callback) {
   db.User.findOneAndUpdate({
     _id: _userId
@@ -105,5 +69,11 @@ exports.offline = function(_userId, callback) {
 exports.getOnlineUsers = function(callback) {
   db.User.find({
     online: true
+  }, callback)
+}
+
+exports.getAvatarUrlOfUser = function(username, callback) {
+  db.User.findOne({
+    username: username
   }, callback)
 }

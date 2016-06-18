@@ -17,9 +17,9 @@ angular.module('webchatApp').controller('UserSearchCtrl', function($scope, socke
     }
   }
   $scope.sendApplyForFriend = function() {
-    console.log(searchUsername)
     if(searchUsername) {
       socket.emit('apply', searchUsername)
+      $("#searchResultModal").modal("hide")
     }
   }
 })

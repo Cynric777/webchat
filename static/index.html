@@ -35,10 +35,18 @@
                   {{me.applyNumber}}&nbsp个新消息
                 </li>
                 <li class="divider"></li>
-                <li class="message-preview">
+                <li class="message-preview" ng-repeat="apply in me.agreeArray track by $index" style="font-size:14px">
                   <a href="#">
                     <i class="glyphicon glyphicon-bell"></i>
-                    &nbsp&nbspSnow已经同意加您为好友
+                    &nbsp&nbsp{{apply.guest}}已经同意加您为好友
+                    <i class="glyphicon glyphicon-ok" style="float:right;" ng-click="handle(apply)"></i>
+                  </a>
+                </li>
+                <li class="message-preview" ng-repeat="apply in me.refuseArray track by $index" style="font-size:14px">
+                  <a href="#">
+                    <i class="glyphicon glyphicon-bell"></i>
+                    &nbsp&nbsp{{apply.guest}}拒绝加您为好友
+                    <i class="glyphicon glyphicon-remove" style="float:right;" ng-click="handle(apply)"></i>
                   </a>
                 </li>
                 <li class="message-preview" ng-repeat="apply in me.applyArray track by $index" style="font-size:14px">
