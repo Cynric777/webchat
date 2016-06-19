@@ -4,12 +4,9 @@ var ObjectId = Schema.ObjectId
 
 var Message = new Schema({
   message: String,
-  creator: {
-    _id: ObjectId,
-    email: String,
-    name: String,
-    avatarUrl: String
-  },
+  sender: String,
+  receiver: String,
+  avatarUrl: String,
   createAt: {
     type: Date,
     default: Date.now

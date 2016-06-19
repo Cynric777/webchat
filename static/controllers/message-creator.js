@@ -3,7 +3,9 @@ angular.module('webchatApp').controller('MessageCreatorCtrl', function($scope, s
   $scope.createMessage = function() {
     socket.emit('createMessage', {
       message: $scope.newMessage,
-      creator: $scope.me
+      sender: $scope.me.username,
+      receiver: $scope.$parent.chat.friend,
+      avatarUrl: $scope.me.avatarUrl
     })
     $scope.newMessage = ''
   }

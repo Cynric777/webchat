@@ -299,6 +299,12 @@ io.sockets.on('connection', function(socket) {
     })
   })
 
+  socket.on('getHistoryChat', function(pair) {
+    Controllers.Message.findMessageByPair(pair.host, pair.guest, function(err, historyChatContent) {
+      console.log(historyChatContent)
+    })
+  })
+
   socket.on('createMessage', function(message) {
     Controllers.Message.create(message, function(err, message) {
       if (err) {
@@ -306,6 +312,8 @@ io.sockets.on('connection', function(socket) {
            msg: err
          })
       } else {
+        io.sockets.emit('messageAdded'+message.receiver, message)
+        io.sockets.emit('messageAdded'+message.sender, message)
         io.sockets.emit('messageAdded', message)
       }
     })

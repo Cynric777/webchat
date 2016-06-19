@@ -10,8 +10,6 @@ angular.module('webchatApp').directive('ctrlEnterBreakLine', function() {
       }
       if (evt.which == 13) {
         if (ctrlDown) {
-          element.val(element.val() + '\n')
-        } else {
           scope.$apply(function() {
             scope.$eval(attrs.ctrlEnterBreakLine)
           })

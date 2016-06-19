@@ -35,11 +35,44 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
     groupArray = _.toArray(_.groupBy(friendArray, function(friend) {
       return friend.groupname
     }))
-    console.log(groupArray)
     if (_.isEqual($scope.groupArray, groupArray) == false) {
       $scope.groupArray = groupArray
     }
   })
+
+  $scope.chat = function(guest) {
+    var chatRoom = {
+      friend: guest,
+      messages: []
+    }
+    if (_.find($scope.chatList, function(chat) {
+      return chat.friend == guest
+    }) == null) {
+      $scope.chatList.push(chatRoom)
+    }
+    socket.emit('getHistoryChat', {
+      host: $scope.$parent.me.username,
+      guest: guest
+    })
+  }
+
+  $scope.removeChat = function(guest) {
+    $scope.chatList = $scope.chatList.filter(function(chat) {
+      return chat.friend != guest
+    })
+    $("#home-tab").tab('show')
+    $("#home").addClass("active in")
+  }
+
+  $scope.sendMessage = function(friend) {
+    socket.emit('createMessage', {
+      message: $("#messageTo"+friend).val(),
+      sender: $scope.$parent.me.username,
+      receiver: friend,
+      avatarUrl: $scope.$parent.me.avatarUrl
+    })
+    $("#messageTo"+friend).val(null)
+  }
 
   socket.on('online', function(user) {
     $scope.room.users.push(user)
@@ -52,10 +85,15 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
     })
   })
 
+  socket.on('messageAdded'+$scope.$parent.me.username, function(message) {
+    console.log(message)
+  })
+
   socket.on('messageAdded', function(message) {
     $scope.room.messages.push(message)
   })
 
+  $scope.chatList = []
   username = $scope.$parent.me.username
   socket.emit('getRoom')
   socket.emit('getFriend', username)

@@ -19,7 +19,7 @@
 <div class="col-md-3">
   <div class="panel panel-default user-list">
     <div class="panel-heading user-list-header">好友列表</div>
-    <div class="panel-body user-list-content">
+    <div class="panel-body user-list-content" style="min-height:670px;">
       <div ng-repeat="group in groupArray track by $index">
         <div class="panel-group" id="accordion{{$index}}" role="tablist" aria-multiselectable="true">
           <div class="panel panel-default">
@@ -32,8 +32,8 @@
             </div>
             <div id="collapse{{$index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{$index}}">
               <div class="list-group">
-                <div class="list-group-item" ng-repeat="friend in group track by $index" ng-show="friend.guest">
-                  <img height="32px" width="32px" src="{{friend.avatarUrl}}" title="{{friend.guest}}" class="img-circle" />
+                <div class="list-group-item" href="#" ng-repeat="friend in group track by $index" ng-show="friend.guest" ng-dblclick="chat(friend.guest)">
+                  <img href="#" height="32px" width="32px" src="{{friend.avatarUrl}}" title="{{friend.guest}}" class="img-circle" />
                   {{friend.guest}}
                 </div>
               </div>
@@ -41,21 +41,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="headingOne">
-            <h4 class="panel-title">
-              <a role="button" data-toggle="collapse" data-parent="#accordion1" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                Collapsible Group Item #1
-              </a>
-            </h4>
-          </div>
-          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
-              Anim pariatur cliche reprehenderit</div>
-          </div>
-        </div>
-      </div> -->
     </div>
     <div class="panel-footer">
       <div class="input-group" ng-controller="UserSearchCtrl">
@@ -66,6 +51,53 @@
   </div>
 </div>
 <div class="col-md-9">
+    <ul id="chatList" class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a data-target="#home" href="#" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+          Home
+        </a>
+      </li>
+      <li role="presentation" class="" ng-repeat="chat in chatList">
+        <a data-target="#{{chat.friend}}-room" href="#" id="{{chat.friend}}-tab" role="tab" data-toggle="tab" aria-controls="{{chat.friend}}-room" aria-expanded="true">
+          {{chat.friend}}
+        </a>
+      </li>
+    </ul>
+    <div id="chatListContent" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+        <div class="panel panel-default">
+          <div class="panel-body" style="height:720px;" align="center">
+            <img src="/images/home-logo.gif" style="margin-top:150px">
+            <h1>快点开始新的聊天吧！</h1>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="{{chat.friend}}-room" aria-labelledby="{{chat.friend}}-tab" ng-repeat="chat in chatList track by $index">
+        <div class="panel panel-default">
+          <div class="panel-body" style="height:560px;">
+            <p>{{chat.friend}}</p>
+          </div>
+          <div class="panel-footer">
+            <form class="message-creator" ng-controller="MessageCreatorCtrl">
+              <div class="form-group" style="margin-top:15px">
+                <textarea required id="messageTo{{chat.friend}}" class="form-control message-input" ng-model="newMessage" ctrl-enter-break-line="createMessage()" placeholder="Ctrl+Enter快速发送" style="resize:none;height:80px;"></textarea>
+              </div>
+            </form>
+            <div>
+              <button class="btn bnt-primary" ng-click="removeChat(chat.friend)">
+                关闭
+              </button>
+              <button class="btn btn-primary" style="float:right;" ng-click="sendMessage(chat.friend)">
+                <i class="glyphicon glyphicon-send"></i>
+                &nbsp&nbsp发送
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- <div class="col-md-9">
   <div class="panel panel-default room">
     <div class="panel-heading room-header">webchat</div>
     <div class="panel-body room-content">
@@ -83,4 +115,4 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
