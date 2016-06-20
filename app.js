@@ -278,6 +278,22 @@ io.sockets.on('connection', function(socket) {
     Controllers.Apply.createApply(username, _username, null)
   })
 
+  socket.on('group', function(info) {
+    Controllers.Group.createGroup(info.groupname, info.username, null)
+  })
+
+  socket.on('changeGroup', function(info) {
+    Controllers.Group.updateGroupname(info.host, info.guest, info.groupname, function(err, group) {
+    })
+  })
+
+  socket.on('deleteFriend', function(info) {
+    Controllers.Group.deleteFriend(info.host, info.guest, function(err, group) {
+    })
+    Controllers.Group.deleteFriend(info.guest, info.host, function(err, group) {
+    })
+  })
+
   socket.on('getRoom', function() {
     async.parallel([
       function(done) {

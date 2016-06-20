@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        <h4 class="modal-title"><img height="60px" width="60px" src="/images/search-logo.png" />查找</h4>
+        <h4 class="modal-title" style="font-weight: bold;"><img height="60px" width="60px" src="/images/search-logo.png" />&nbsp&nbsp查找</h4>
       </div>
       <div class="modal-body">
         <p id="resultTitle">用户不存在</p>
@@ -16,10 +16,48 @@
     </div>
   </div>
 </div>
+<div id="addGroupModal" class="modal fade" tabindex="-1" role="dialog" style="display: none;" ng-controller="AddGroupCtrl">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" style="font-weight: bold;"><img height="60px" width="60px" src="/images/group-logo.png" />&nbsp&nbsp新建分组</h4>
+      </div>
+      <div class="modal-body" style="padding-bottom:50px;">
+        <p>组名</p>
+        <input type="text" required class="form-control" id="newGroupname"/>
+        <br>
+        <button type="button" class="btn btn-success" ng-click="createGroup()" style="float:right;"><i class="glyphicon glyphicon-star"></i>&nbsp&nbsp确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="changeGroupModal" class="modal fade" tabindex="-1" role="dialog" style="display: none;" ng-controller="ChangeGroupCtrl">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" style="font-weight: bold;"><img height="60px" width="60px" src="/images/group-logo.png" />&nbsp&nbsp好友管理</h4>
+      </div>
+      <div class="modal-body">
+        <p>移动到</p>
+        <select class="form-control" id=selectGroupname>
+          <option ng-repeat="group in groupArray track by $index">{{group[0].groupname}}</option>
+        </select>
+        <br>
+        <button type="button" class="btn btn-danger" ng-click="deleteFriend()"><i class="glyphicon glyphicon-trash"></i>&nbsp&nbsp删除TA</button>
+        <button type="button" class="btn btn-success" ng-click="moveFriend()" style="float:right;"><i class="glyphicon glyphicon-star"></i>&nbsp&nbsp确定</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="col-md-3">
   <div class="panel panel-default user-list">
-    <div class="panel-heading user-list-header">好友列表</div>
-    <div class="panel-body user-list-content" style="min-height:670px;">
+    <div class="panel-heading user-list-header">
+      好友列表
+      <i class="glyphicon glyphicon-plus" style="float:right;" href="#" ng-click="addGroup()"></i>
+    </div>
+    <div class="panel-body user-list-content" style="height:670px; overflow:auto;">
       <div ng-repeat="group in groupArray track by $index">
         <div class="panel-group" id="accordion{{$index}}" role="tablist" aria-multiselectable="true">
           <div class="panel panel-default">
@@ -35,6 +73,7 @@
                 <div class="list-group-item" href="#" ng-repeat="friend in group track by $index" ng-show="friend.guest" ng-dblclick="chat(friend.guest)">
                   <img href="#" height="32px" width="32px" src="{{friend.avatarUrl}}" title="{{friend.guest}}" class="img-circle" />
                   {{friend.guest}}
+                  <i class="glyphicon glyphicon-th-list" style="float:right; padding-top:6px;" href="#" ng-click="changeGroup(friend.guest)"></i>
                 </div>
               </div>
             </div>
@@ -109,22 +148,3 @@
       </div>
     </div>
   </div>
-<!-- <div class="col-md-9">
-  <div class="panel panel-default room">
-    <div class="panel-heading room-header">webchat</div>
-    <div class="panel-body room-content">
-      <div class="list-group messages" auto-scroll-to-bottom>
-        <div class="list-group-item message" ng-repeat="message in room.messages track by $index">
-          <img height="32px" width="32px" ng-src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-circle" />
-          {{message.creator.name}}：{{message.message}}
-          <time am-time-ago="message.createAt"></time>
-        </div>
-      </div>
-      <form class="message-creator" ng-controller="MessageCreatorCtrl">
-        <div class="form-group">
-          <textarea required class="form-control message-input" ng-model="newMessage" ctrl-enter-break-line="createMessage()" placeholder="Ctrl+Enter to quick send"></textarea>
-        </div>
-      </form>
-    </div>
-  </div>
-</div> -->

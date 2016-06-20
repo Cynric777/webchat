@@ -38,6 +38,7 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
     if (_.isEqual($scope.groupArray, groupArray) == false) {
       $scope.groupArray = groupArray
     }
+    console.log($scope.groupArray)
   })
 
   socket.on('chatData', function(historyChatContent) {
@@ -45,7 +46,6 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
       message.createAt = (""+message.createAt).substring(0,10)+" "+(""+message.createAt).substring(11,19)
       return message
     })
-    console.log(historyChatContent)
     _.find($scope.chatList, function(chat) {
       return chat.friend == historyChatContent.friend
     }).messages = historyChatContent.msg
@@ -83,6 +83,15 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
       avatarUrl: $scope.$parent.me.avatarUrl
     })
     $("#messageTo"+friend).val(null)
+  }
+
+  $scope.addGroup = function() {
+    $("#addGroupModal").modal("show")
+  }
+
+  $scope.changeGroup = function(friend) {
+    $scope.select = friend
+    $("#changeGroupModal").modal("show")
   }
 
   socket.on('online', function(user) {

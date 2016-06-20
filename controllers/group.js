@@ -41,3 +41,20 @@ exports.updateAvatarUrl = function(username, avatarUrl, callback) {
     multi: true
   }, callback)
 }
+exports.updateGroupname = function(host, guest, groupname, callback) {
+  db.Group.findOneAndUpdate({
+    host: host,
+    guest: guest
+  }, {
+    $set: {
+      groupname: groupname
+    }
+  }, callback)
+}
+
+exports.deleteFriend = function(host, guest, callback) {
+  db.Group.findOneAndRemove({
+    host: host,
+    guest: guest
+  }, callback)
+}
