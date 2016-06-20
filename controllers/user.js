@@ -77,3 +77,13 @@ exports.getAvatarUrlOfUser = function(username, callback) {
     username: username
   }, callback)
 }
+
+exports.updateAvatarUrl = function(username, avatarUrl, callback) {
+  db.User.findOneAndUpdate({
+    username: username
+  }, {
+    $set: {
+      avatarUrl: avatarUrl
+    }
+  }, callback)
+}

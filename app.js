@@ -178,6 +178,28 @@ app.post('/api/handleApply', function(req, res) {
   })
 })
 
+app.post('/api/avatar', function(req, res) {
+  console.log("in avatar")
+  var username = req.body.username
+  var password = req.body.password
+  var avatarUrl = req.body.avatarUrl
+  Controllers.User.checkPassword(username, password, function(err, user) {
+    if (err) {
+      res.json(401).json(err)
+    } else {
+      if (user) {
+        Controllers.User.updateAvatarUrl(user.username, avatarUrl, function(err, data) {
+        })
+        Controllers.Message.updateAvatarUrl(user.username, avatarUrl, function(err, data) {
+        })
+        Controllers.Group.updateAvatarUrl(user.username, avatarUrl, function(err, data) {
+        })
+        res.json("OK")
+      }
+    }
+  })
+})
+
 app.use(function(req, res) {
   res.sendFile(path.join(__dirname, './static/index.html'))
 })
@@ -301,7 +323,10 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('getHistoryChat', function(pair) {
     Controllers.Message.findMessageByPair(pair.host, pair.guest, function(err, historyChatContent) {
-      console.log(historyChatContent)
+      socket.emit('chatData', {
+        msg: historyChatContent,
+        friend: pair.guest
+      })
     })
   })
 

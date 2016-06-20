@@ -38,3 +38,15 @@ exports.findMessageByPair = function(host, guest, callback) {
     limit: 20
   }, callback)
 }
+
+exports.updateAvatarUrl = function(username, avatarUrl, callback) {
+  db.Message.update({
+    sender: username
+  }, {
+    $set: {
+      avatarUrl: avatarUrl
+    }
+  }, {
+    multi: true
+  },  callback)
+}

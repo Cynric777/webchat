@@ -83,8 +83,27 @@ angular.module('webchatApp', ['ngRoute', 'angularMoment']).run(function($window,
       $rootScope.me.applyNumber--
     })
   }
+  $rootScope.changeAvatarUrl = function() {
+    $("#changeAvatarUrlModal").modal("show")
+  }
+  $rootScope.updateAvatarUrl = function() {
+    $("#changeAvatarUrlModal").modal("hide")
+    $http({
+      url: '/api/avatar',
+      method: 'POST',
+      data: {
+        username: $rootScope.me.username,
+        password: $rootScope.me.password,
+        avatarUrl: $("#newAvatarUrl").val()
+      }
+    }).then(function successCallback(data) {
+      alert("修改头像成功")
+    }, function errorCallback(data) {
+      alert("修改头像失败")
+    })
+    $("#newAvatarUrl").val(null)
+  }
   $rootScope.$on('login', function(evt, me) {
     $rootScope.me = me
-    $rootScope.me.password = null
   })
 })

@@ -29,3 +29,15 @@ exports.findGroupByHost = function(host, callback) {
     host: host
   }, callback)
 }
+
+exports.updateAvatarUrl = function(username, avatarUrl, callback) {
+  db.Group.update({
+    guest: username
+  }, {
+    $set: {
+      avatarUrl: avatarUrl
+    }
+  }, {
+    multi: true
+  }, callback)
+}

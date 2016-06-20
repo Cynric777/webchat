@@ -1,4 +1,4 @@
-<div id="searchResultModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;"  ng-controller="UserSearchCtrl">
+<div id="searchResultModal" class="modal fade" tabindex="-1" role="dialog" style="display: none;"  ng-controller="UserSearchCtrl">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -54,12 +54,14 @@
     <ul id="chatList" class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">
         <a data-target="#home" href="#" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
-          Home
+          &nbsp主页&nbsp
         </a>
       </li>
       <li role="presentation" class="" ng-repeat="chat in chatList">
         <a data-target="#{{chat.friend}}-room" href="#" id="{{chat.friend}}-tab" role="tab" data-toggle="tab" aria-controls="{{chat.friend}}-room" aria-expanded="true">
-          {{chat.friend}}
+          &nbsp{{chat.friend}}&nbsp&nbsp&nbsp
+
+          <button type="button" class="close" ng-click="removeChat(chat.friend)"><span aria-hidden="true">×</span></button>
         </a>
       </li>
     </ul>
@@ -74,8 +76,18 @@
       </div>
       <div role="tabpanel" class="tab-pane fade" id="{{chat.friend}}-room" aria-labelledby="{{chat.friend}}-tab" ng-repeat="chat in chatList track by $index">
         <div class="panel panel-default">
-          <div class="panel-body" style="height:560px;">
-            <p>{{chat.friend}}</p>
+          <div class="panel-body" style="height:560px; overflow:auto;">
+            <div auto-scroll-to-bottom>
+              <div ng-repeat="message in chat.messages track by $index">
+                <h5 style="font-size:10px">
+                  {{message.createAt}}
+                </h5>
+                <div style="font-size:14px; font-weight:bold;">
+                  <img height="40px" width="40px" ng-src="{{message.avatarUrl}}" title="{{message.sender}}" class="img-circle" />
+                  {{message.sender}}：{{message.message}}
+                </div>
+              </div>
+            </div>
           </div>
           <div class="panel-footer">
             <form class="message-creator" ng-controller="MessageCreatorCtrl">
@@ -87,7 +99,7 @@
               <button class="btn bnt-primary" ng-click="removeChat(chat.friend)">
                 关闭
               </button>
-              <button class="btn btn-primary" style="float:right;" ng-click="sendMessage(chat.friend)">
+              <button class="btn btn-success" style="float:right;" ng-click="sendMessage(chat.friend)">
                 <i class="glyphicon glyphicon-send"></i>
                 &nbsp&nbsp发送
               </button>

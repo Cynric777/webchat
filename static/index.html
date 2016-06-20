@@ -14,17 +14,17 @@
     <script type="text/javascript" src="/components/angular-moment/angular-moment.js"></script>
     <script type="text/javascript" src="/components/moment/lang/zh-cn.js"></script>
   </head>
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+  <body style="background-color:#ff8c1a">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#ffffff; border-color:#ffffff">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">webchat</a>
+          <a class="navbar-brand" href="#" style="color:#ff8c1a; font-size:30px; margin-top:5px;">webchat</a>
           <img height="60px" width="60px" src="/images/navbar-logo.png" />
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
           <ul class="nav navbar-nav navbar-right" ng-show="me">
-            <li class="dropdown messages-dropdown" style="padding-top:4px;">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <li class="dropdown messages-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"  style="padding-top:19px; height:60px;">
                 <i class="glyphicon glyphicon-envelope"></i>
                 &nbsp&nbsp消息
                 <span class="badge">{{me.applyNumber}}</span>
@@ -35,21 +35,21 @@
                   {{me.applyNumber}}&nbsp个新消息
                 </li>
                 <li class="divider"></li>
-                <li class="message-preview" ng-repeat="apply in me.agreeArray track by $index" style="font-size:14px">
+                <li class="message-preview" ng-repeat="apply in me.agreeArray track by $index" style="font-size:14px;">
                   <a href="#">
                     <i class="glyphicon glyphicon-bell"></i>
                     &nbsp&nbsp{{apply.guest}}已经同意加您为好友
                     <i class="glyphicon glyphicon-ok" style="float:right;" ng-click="handle(apply)"></i>
                   </a>
                 </li>
-                <li class="message-preview" ng-repeat="apply in me.refuseArray track by $index" style="font-size:14px">
+                <li class="message-preview" ng-repeat="apply in me.refuseArray track by $index" style="font-size:14px;">
                   <a href="#">
                     <i class="glyphicon glyphicon-bell"></i>
                     &nbsp&nbsp{{apply.guest}}拒绝加您为好友
                     <i class="glyphicon glyphicon-remove" style="float:right;" ng-click="handle(apply)"></i>
                   </a>
                 </li>
-                <li class="message-preview" ng-repeat="apply in me.applyArray track by $index" style="font-size:14px">
+                <li class="message-preview" ng-repeat="apply in me.applyArray track by $index" style="font-size:14px;">
                   <a href="#">
                     <i class="glyphicon glyphicon-bell"></i>
                     &nbsp&nbsp{{apply.guest}}申请加您为好友
@@ -66,7 +66,7 @@
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="#"><i class="glyphicon glyphicon-user"></i>&nbsp&nbsp&nbsp&nbsp个人信息</a></li>
+                <li><a href="" ng-click="changeAvatarUrl()"><i class="glyphicon glyphicon-user"></i>&nbsp&nbsp&nbsp&nbsp头像管理</a></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog"></i>&nbsp&nbsp&nbsp&nbsp设置</a></li>
                 <li class="divider"></li>
                 <li><a href="" ng-click="logout()"><span class="glyphicon glyphicon-off"></span>&nbsp&nbsp&nbsp&nbsp注销</a></li>
@@ -78,6 +78,22 @@
     </div>
     <div class="container" style="margin-top:100px;">
       <div class="row" ng-view></div>
+    </div>
+    <div id="changeAvatarUrlModal" class="modal fade" tabindex="-1" role="dialog" style="display: none;" ng-show="me">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title"><img height="60px" width="60px" src="/images/avtar-logo.png" />更换头像</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:50px;">
+            <p>地址</p>
+            <input type="text" required class="form-control" id="newAvatarUrl" placeholder="{{me.avatarUrl}}" />
+            <br>
+            <button type="button" class="btn btn-success" ng-click="updateAvatarUrl()" style="float:right;"><i class="glyphicon glyphicon-camera"></i>&nbsp&nbsp确定</button>
+          </div>
+        </div>
+      </div>
     </div>
     <script type="text/javascript" src="/webchat.js"></script>
     <script type="text/javascript" src="/services/socket.js"></script>

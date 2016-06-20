@@ -40,6 +40,17 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
     }
   })
 
+  socket.on('chatData', function(historyChatContent) {
+    historyChatContent.msg = _.map(historyChatContent.msg, function(message) {
+      message.createAt = (""+message.createAt).substring(0,10)+" "+(""+message.createAt).substring(11,19)
+      return message
+    })
+    console.log(historyChatContent)
+    _.find($scope.chatList, function(chat) {
+      return chat.friend == historyChatContent.friend
+    }).messages = historyChatContent.msg
+  })
+
   $scope.chat = function(guest) {
     var chatRoom = {
       friend: guest,
@@ -86,7 +97,9 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
   })
 
   socket.on('messageAdded'+$scope.$parent.me.username, function(message) {
-    console.log(message)
+    _.find($scope.chatList, function(chat) {
+      return chat.friend == message.sender || chat.friend == message.receiver
+    }).messages.push(message)
   })
 
   socket.on('messageAdded', function(message) {
