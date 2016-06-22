@@ -1,5 +1,4 @@
 var db = require('../models')
-var async = require('async')
 var gravatar = require('gravatar')
 
 exports.findUserById = function(_userId, callback) {

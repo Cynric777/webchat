@@ -38,7 +38,6 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
     if (_.isEqual($scope.groupArray, groupArray) == false) {
       $scope.groupArray = groupArray
     }
-    console.log($scope.groupArray)
   })
 
   socket.on('chatData', function(historyChatContent) {
@@ -106,6 +105,7 @@ angular.module('webchatApp').controller('RoomCtrl', function($scope, socket) {
   })
 
   socket.on('messageAdded'+$scope.$parent.me.username, function(message) {
+    message.createAt = (""+message.createAt).substring(0,10)+" "+(""+message.createAt).substring(11,19)
     _.find($scope.chatList, function(chat) {
       return chat.friend == message.sender || chat.friend == message.receiver
     }).messages.push(message)

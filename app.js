@@ -245,6 +245,7 @@ io.sockets.on('connection', function(socket) {
     }
   })
   socket.on('disconnect', function() {
+    _userId = socket.request.session._userId
     Controllers.User.offline(_userId, function(err, user) {
       if (err) {
         socket.emit('err', {
@@ -274,8 +275,8 @@ io.sockets.on('connection', function(socket) {
     })
   })
 
-  socket.on('apply', function(username) {
-    Controllers.Apply.createApply(username, _username, null)
+  socket.on('apply', function(info) {
+    Controllers.Apply.createApply(info.target, info.sponsor, null)
   })
 
   socket.on('group', function(info) {

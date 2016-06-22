@@ -41,6 +41,7 @@ exports.updateAvatarUrl = function(username, avatarUrl, callback) {
     multi: true
   }, callback)
 }
+
 exports.updateGroupname = function(host, guest, groupname, callback) {
   db.Group.findOneAndUpdate({
     host: host,

@@ -1,6 +1,6 @@
-//angular.module('webchatApp', [])
 angular.module('webchatApp', ['ngRoute', 'angularMoment']).run(function($window, $rootScope, $http, $location) {
   $window.moment.locale('zh-cn')
+  $location.path('/index')
   // $http({
   //   url: '/api/validate',
   //   method: 'GET'
@@ -12,19 +12,14 @@ angular.module('webchatApp', ['ngRoute', 'angularMoment']).run(function($window,
   //   console.log("未登录")
   //   $location.path('/login')
   // })
-  $location.path('/index')
   $rootScope.logout = function() {
     $http({
       url: '/api/logout',
       method: 'GET'
     }).then(function successCallback(user) {
-      // var _userId = user.data._id
       console.log("注销")
       $rootScope.me = null
       $location.path('/index')
-      // $rootScope.$$childHead.room.users = $rootScope.$$childHead.room.users.filter(function(user) {
-      //   return user._id != _userId
-      // })
     })
   }
   $rootScope.handle = function(apply) {
@@ -45,7 +40,6 @@ angular.module('webchatApp', ['ngRoute', 'angularMoment']).run(function($window,
       })
       $rootScope.me.applyNumber--
     })
-
   }
   $rootScope.handleAgree = function(apply) {
     console.log("agree")

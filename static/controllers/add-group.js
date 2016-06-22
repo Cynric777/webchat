@@ -8,3 +8,4 @@ angular.module('webchatApp').controller('AddGroupCtrl', function($scope, socket)
     $("#newGroupname").val(null)
   }
 })
+j
